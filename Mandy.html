@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mandy 소개</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --text: #1a1d29;
+      --muted: #6b7083;
+      --line: #e6e8f0;
+      --accent: #3b6cf6;
+      --accent-soft: #eaf0ff;
+      --heart: #ffe6ee;
+      --heart-line: #ffc4d6;
+      --shadow: 0 10px 30px rgba(26, 29, 41, 0.06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #F2E9ED;
+        --surface: #FFFCFD;
+        --text: #242633;
+        --muted: #858B9C;
+        --line: #E8DDE3;
+        --accent: #7C9CFF;
+        --accent-soft: #EAF0FF;
+        --heart: #F1E1E8;
+        --heart-line: #D9AFC1;
+        --shadow: 0 10px 30px rgba(40, 30, 45, 0.08);
+      }   
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      overflow: hidden;
+      border: 3px solid var(--surface);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .team {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .intro {
+      font-size: 17px;
+      color: var(--muted);
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin: 28px 0 14px;
+    }
+
+    /* 좋아하는 것: 하트 3개를 가로로 나란히 */
+    .likes {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    /* 하트 한 칸: 가로:세로 = 100:92 (하트 그림 비율) */
+    .likes li {
+      position: relative;
+      min-width: 0;
+      aspect-ratio: 100 / 92;
+      font-weight: 500;
+      transition: transform 0.15s ease;
+    }
+
+    .likes li:hover { transform: translateY(-3px); }
+
+    /* 하트 그림 (칸 크기에 맞춰 늘어나요) */
+    .heart-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .heart-bg path {
+      fill: var(--heart);
+      stroke: var(--heart-line);
+      stroke-width: 1.5;
+      vector-effect: non-scaling-stroke;
+      transition: stroke 0.15s ease;
+    }
+
+    .likes li:hover .heart-bg path,
+    .likes li:focus-within .heart-bg path {
+      stroke: var(--accent);
+      stroke-width: 2;
+    }
+
+    /* 버튼 기본 모양 지우기 (.like-content보다 먼저 써야 위치 설정이 지워지지 않아요) */
+    .like-btn {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    /* 하트 안의 이모지 + 글자 (하트의 통통한 윗부분 가운데에 배치) */
+    .like-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 8% 14% 24%;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.35;
+      word-break: keep-all;
+    }
+
+    .emoji { font-size: 26px; line-height: 1; }
+
+    .hint {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* 커비가 쿠키를 빨아들이는 효과 */
+    .card { position: relative; }
+
+    .avatar { transition: transform 0.3s ease; }
+    .avatar.inhaling { transform: scale(1.12); }
+
+    .flying-cookie,
+    .crumb {
+      position: fixed;
+      pointer-events: none;
+      z-index: 10;
+      transform: translate(-50%, -50%);
+    }
+
+    .flying-cookie { font-size: 24px; line-height: 1; }
+
+    .crumb {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #c98a4b;
+    }
+
+    .yum {
+      position: absolute;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 20px;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 24px 16px; align-items: flex-start; }
+      .card { padding: 32px 22px; border-radius: 20px; }
+      h1 { font-size: 30px; }
+      .intro { font-size: 16px; }
+      .likes { gap: 6px; }
+      .like-content { font-size: 12px; padding: 6% 10% 24%; }
+      .emoji { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <div class="avatar"><img src="profile.png" alt="Mandy 프로필 이미지" /></div>
+      <span class="team">모두닥 CS/CX팀</span>
+      <h1>안녕하세요, Mandy입니다 👋</h1>
+      <p class="intro">
+        고객의 목소리를 가장 가까이에서 듣고, 모두닥을 더 편리하고 신뢰할 수 있는 서비스로 만들어가고 있어요.</p>
+
+      <h2>좋아하는 것</h2>
+      <ul class="likes">
+        <li>
+          <svg class="heart-bg" viewBox="0 0 100 92" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M50 88 C50 88 4 60 4 30 C4 15 15 4 29 4 C38 4 46 9 50 17 C54 9 62 4 71 4 C85 4 96 15 96 30 C96 60 50 88 50 88 Z" />
+          </svg>
+          <button type="button" class="like-content like-btn" id="snackBtn">
+            <span class="emoji">🍪</span>새로운 과자 사먹기
+          </button>
+        </li>
+        <li>
+          <svg class="heart-bg" viewBox="0 0 100 92" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M50 88 C50 88 4 60 4 30 C4 15 15 4 29 4 C38 4 46 9 50 17 C54 9 62 4 71 4 C85 4 96 15 96 30 C96 60 50 88 50 88 Z" />
+          </svg>
+          <div class="like-content"><span class="emoji">🧱</span>블록 조립하기</div>
+        </li>
+        <li>
+          <svg class="heart-bg" viewBox="0 0 100 92" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M50 88 C50 88 4 60 4 30 C4 15 15 4 29 4 C38 4 46 9 50 17 C54 9 62 4 71 4 C85 4 96 15 96 30 C96 60 50 88 50 88 Z" />
+          </svg>
+          <div class="like-content"><span class="emoji">🌿</span>자연 구경하기</div>
+        </li>
+      </ul>
+      <p class="hint">🍪 쿠키 하트를 눌러보세요</p>
+    </section>
+    <footer>© 2026 Mandy</footer>
+  </main>
+
+  <script>
+    const snackBtn = document.getElementById("snackBtn");
+    const avatar = document.querySelector(".avatar");
+    const card = document.querySelector(".card");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // 쿠키(또는 부스러기)를 시작점에서 커비 입까지 날려 보내는 함수
+    function fly(el, start, end, duration, delay) {
+      el.style.left = start.x + "px";
+      el.style.top = start.y + "px";
+      document.body.appendChild(el);
+
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+
+      const anim = el.animate(
+        [
+          { transform: "translate(-50%, -50%) scale(1) rotate(0deg)", opacity: 1 },
+          {
+            transform: `translate(calc(-50% + ${dx * 0.45}px), calc(-50% + ${dy * 0.5 - 30}px)) scale(0.9) rotate(200deg)`,
+            opacity: 1,
+            offset: 0.45
+          },
+          { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0.1) rotate(540deg)`, opacity: 0.4 }
+        ],
+        { duration, delay, easing: "cubic-bezier(.55, 0, .85, .4)", fill: "forwards" }
+      );
+      anim.onfinish = () => el.remove();
+      return anim;
+    }
+
+    // 쿠키를 먹은 뒤 꿀꺽하는 동작 + "냠!" 말풍선
+    function gulp() {
+      avatar.animate(
+        [
+          { transform: "scale(1.12)" },
+          { transform: "scale(0.9, 1.1)" },
+          { transform: "scale(1.08, 0.94)" },
+          { transform: "scale(1)" }
+        ],
+        { duration: 450, easing: "ease-out" }
+      );
+
+      const yum = document.createElement("span");
+      yum.className = "yum";
+      yum.textContent = "냠냠! 🍪";
+      yum.style.left = avatar.offsetLeft + avatar.offsetWidth + 8 + "px";
+      yum.style.top = avatar.offsetTop + 10 + "px";
+      card.appendChild(yum);
+      yum.animate(
+        [
+          { transform: "translateY(6px)", opacity: 0 },
+          { transform: "translateY(0)", opacity: 1, offset: 0.2 },
+          { transform: "translateY(-14px)", opacity: 0 }
+        ],
+        { duration: 1100, easing: "ease-out" }
+      ).onfinish = () => yum.remove();
+    }
+
+    snackBtn.addEventListener("click", () => {
+      if (reduceMotion) {
+        gulp();
+        return;
+      }
+
+      const from = snackBtn.querySelector(".emoji").getBoundingClientRect();
+      const to = avatar.getBoundingClientRect();
+      const start = { x: from.left + from.width / 2, y: from.top + from.height / 2 };
+      // 프로필 사진 속 커비 입 위치 (사진의 가로 60%, 세로 62% 지점)
+      const mouth = { x: to.left + to.width * 0.6, y: to.top + to.height * 0.62 };
+
+      avatar.classList.add("inhaling");
+
+      const cookie = document.createElement("span");
+      cookie.className = "flying-cookie";
+      cookie.textContent = "🍪";
+      const cookieAnim = fly(cookie, start, mouth, 750, 0);
+
+      // 쿠키 뒤를 따라 빨려 들어가는 부스러기 4개
+      for (let i = 0; i < 4; i++) {
+        const crumb = document.createElement("span");
+        crumb.className = "crumb";
+        const jitter = { x: start.x + (Math.random() - 0.5) * 30, y: start.y + (Math.random() - 0.5) * 20 };
+        fly(crumb, jitter, mouth, 650, 120 + i * 70);
+      }
+
+      cookieAnim.addEventListener("finish", () => {
+        avatar.classList.remove("inhaling");
+        gulp();
+      });
+    });
+  </script>
+</body>
+</html>

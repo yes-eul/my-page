@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>index.html 구조 안내</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --text: #1a1d29;
+      --muted: #6b7083;
+      --line: #e6e8f0;
+      --code-bg: #f3f4f8;
+
+      --html: #d9622b;
+      --html-soft: #fdece4;
+      --css: #3b6cf6;
+      --css-soft: #e8efff;
+      --js: #a57a00;
+      --js-soft: #fdf3d4;
+      --mark: #fff1a8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #111318;
+        --surface: #1a1d25;
+        --text: #eef0f6;
+        --muted: #9aa0b4;
+        --line: #2a2e3a;
+        --code-bg: #14161c;
+
+        --html: #ff9466;
+        --html-soft: #3a2419;
+        --css: #7c9cff;
+        --css-soft: #1f2842;
+        --js: #f2c94c;
+        --js-soft: #362d12;
+        --mark: #4a4215;
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 48px 16px 64px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap { max-width: 760px; margin: 0 auto; }
+
+    header { margin-bottom: 36px; }
+    header .eyebrow { font-size: 13px; color: var(--muted); font-weight: 500; }
+    h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; margin: 4px 0 10px; }
+    header p { color: var(--muted); }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+    }
+
+    h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    h2 + .sub { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+    h3 { font-size: 16px; font-weight: 700; margin: 22px 0 8px; }
+    p + p { margin-top: 8px; }
+
+    code, .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.9em;
+    }
+    p code, li code, td code {
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      padding: 1px 6px;
+      border-radius: 6px;
+    }
+
+    /* 태그 색 */
+    .tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 999px; }
+    .tag.html { color: var(--html); background: var(--html-soft); }
+    .tag.css { color: var(--css); background: var(--css-soft); }
+    .tag.js { color: var(--js); background: var(--js-soft); }
+
+    /* 1. 비유 카드 */
+    .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .trio > div { border-radius: 14px; padding: 18px 16px; border: 1px solid var(--line); }
+    .trio .big { font-size: 28px; line-height: 1; margin-bottom: 10px; }
+    .trio .name { font-weight: 800; margin-bottom: 2px; }
+    .trio .what { font-size: 14px; color: var(--muted); }
+    .trio .html { background: var(--html-soft); }
+    .trio .css { background: var(--css-soft); }
+    .trio .js { background: var(--js-soft); }
+    .trio .html .name { color: var(--html); }
+    .trio .css .name { color: var(--css); }
+    .trio .js .name { color: var(--js); }
+
+    /* 2. 파일 지도 */
+    .bar {
+      display: flex;
+      height: 44px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 8px 0 6px;
+      border: 1px solid var(--line);
+    }
+    .bar > div {
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .bar .html { background: var(--html-soft); color: var(--html); }
+    .bar .css { background: var(--css-soft); color: var(--css); }
+    .bar .js { background: var(--js-soft); color: var(--js); }
+    .bar-scale { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+
+    .map { margin-top: 20px; display: grid; gap: 10px; }
+    .map-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border-left: 5px solid;
+      background: var(--code-bg);
+    }
+    .map-row.html { border-color: var(--html); }
+    .map-row.css { border-color: var(--css); }
+    .map-row.js { border-color: var(--js); }
+    .map-row .lines { font-weight: 800; font-size: 15px; }
+    .map-row .lines small { display: block; margin-top: 4px; }
+    .map-row .desc { font-size: 15px; }
+    .map-row .desc ul { margin: 6px 0 0 18px; font-size: 14px; color: var(--muted); }
+
+    /* 3. 화면 위 표시 */
+    .mock-area { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
+    .mock {
+      background: var(--bg);
+      border: 1px dashed var(--line);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .mock-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      position: relative;
+    }
+    .mock .piece { position: relative; margin-bottom: 8px; }
+    .mock .dot { width: 34px; height: 34px; border-radius: 50%; background: #f7b6c8; }
+    .mock .pill { width: 70px; height: 12px; border-radius: 999px; background: var(--css-soft); }
+    .mock .line1 { width: 85%; height: 14px; border-radius: 4px; background: var(--text); opacity: .85; }
+    .mock .line2 { width: 100%; height: 8px; border-radius: 4px; background: var(--muted); opacity: .5; }
+    .mock .line3 { width: 70%; height: 8px; border-radius: 4px; background: var(--muted); opacity: .5; }
+    .mock .hearts { display: flex; gap: 8px; margin-top: 10px; }
+    .mock .hearts span { font-size: 26px; line-height: 1; color: #f2a3ba; }
+    .mock .hearts span:first-child { outline: 2px dashed var(--js); outline-offset: 2px; border-radius: 6px; }
+    .mock-legend { display: grid; gap: 12px; font-size: 14px; }
+    .mock-legend div { display: flex; gap: 10px; align-items: flex-start; }
+    .mock-legend .tag { flex-shrink: 0; margin-top: 2px; }
+
+    /* 코드 블록 */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 0;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.75;
+      margin-top: 10px;
+    }
+    pre .ln { display: block; padding: 0 16px 0 0; white-space: pre; }
+    pre .n {
+      display: inline-block;
+      width: 46px;
+      padding-right: 12px;
+      text-align: right;
+      color: var(--muted);
+      user-select: none;
+    }
+    pre .hl { background: var(--mark); font-weight: 700; }
+    pre .note { color: var(--muted); font-style: italic; }
+
+    /* 4. 배경색 */
+    .bg-demo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 8px; }
+    .bg-box {
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 13px;
+      border: 1px solid var(--line);
+    }
+    .bg-box .stage { border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+    .bg-box .inner { border-radius: 8px; padding: 10px; font-size: 12px; text-align: center; }
+    .bg-box.light .stage { background: #f6f7fb; outline: 3px solid #f2c94c; }
+    .bg-box.light .inner { background: #ffffff; color: #1a1d29; border: 1px solid #e6e8f0; }
+    .bg-box.dark .stage { background: #111318; outline: 3px solid #f2c94c; }
+    .bg-box.dark .inner { background: #1a1d25; color: #eef0f6; border: 1px solid #2a2e3a; }
+    .bg-box .cap { color: var(--muted); }
+    .bg-box .cap b { color: var(--text); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-size: 12px; color: var(--muted); font-weight: 700; }
+    td.num { font-weight: 800; white-space: nowrap; }
+    .swatch {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+      vertical-align: -2px;
+      margin-right: 6px;
+    }
+
+    .steps { counter-reset: s; list-style: none; display: grid; gap: 10px; margin-top: 10px; }
+    .steps li {
+      counter-increment: s;
+      position: relative;
+      padding-left: 38px;
+    }
+    .steps li::before {
+      content: counter(s);
+      position: absolute; left: 0; top: 1px;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--css-soft); color: var(--css);
+      font-weight: 800; font-size: 13px;
+      display: grid; place-items: center;
+    }
+
+    .callout {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--js-soft);
+      font-size: 14px;
+    }
+
+    footer { text-align: center; font-size: 13px; color: var(--muted); margin-top: 28px; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 24px; }
+      section { padding: 22px 16px; }
+      .trio { grid-template-columns: 1fr; }
+      .mock-area { grid-template-columns: 1fr; }
+      .map-row { grid-template-columns: 1fr; gap: 6px; }
+      .bg-demo { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">week 1 · 코드 읽는 법</div>
+      <h1>index.html은 어떻게 생겼을까?</h1>
+      <p>Mandy 소개 페이지 파일 하나(<code>index.html</code>, 총 377줄) 안에 무엇이 어디에 들어 있는지, 개발을 몰라도 알 수 있게 정리했어요.</p>
+    </header>
+
+    <!-- 1. 세 가지 재료 -->
+    <section>
+      <h2>1. 웹페이지는 세 가지 재료로 만들어요</h2>
+      <p class="sub">집 짓기에 비유하면 이해가 쉬워요.</p>
+      <div class="trio">
+        <div class="html">
+          <div class="big">🧱</div>
+          <div class="name">HTML</div>
+          <div class="what"><b>뼈대와 내용</b><br>벽, 방, 가구처럼 "무엇이 있는지" 정해요.<br>예: 이름, 소개 문장, 하트 3개</div>
+        </div>
+        <div class="css">
+          <div class="big">🎨</div>
+          <div class="name">CSS</div>
+          <div class="what"><b>인테리어</b><br>벽지 색, 가구 크기, 배치처럼 "어떻게 보이는지" 정해요.<br>예: 배경색, 하트 모양, 글자 크기</div>
+        </div>
+        <div class="js">
+          <div class="big">💡</div>
+          <div class="name">JavaScript</div>
+          <div class="what"><b>전기와 스위치</b><br>누르면 불이 켜지듯 "무엇을 하면 어떻게 움직이는지" 정해요.<br>예: 쿠키 하트를 누르면 커비가 먹기</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 파일 지도 -->
+    <section>
+      <h2>2. 파일 지도: 몇 번째 줄에 무엇이 있나요?</h2>
+      <p class="sub">VS Code 같은 편집기에서 <code>index.html</code>을 열면 왼쪽에 줄 번호가 보여요. 그 번호 기준이에요.</p>
+
+      <div class="bar" role="img" aria-label="377줄 중 HTML 1~9줄, CSS 10~244줄, HTML 245~282줄, JavaScript 283~377줄">
+        <div class="html" style="width: 2.6%"></div>
+        <div class="css" style="width: 62.3%">CSS (10~244)</div>
+        <div class="html" style="width: 10.1%">HTML</div>
+        <div class="js" style="width: 25%">JS (284~375)</div>
+      </div>
+      <div class="bar-scale"><span>1줄</span><span>377줄</span></div>
+
+      <div class="map">
+        <div class="map-row html">
+          <div class="lines">1 ~ 9줄<small><span class="tag html">HTML</span></small></div>
+          <div class="desc">
+            <b>기본 설정</b>: 브라우저에게 알려주는 정보예요. 화면에는 안 보여요.
+            <ul>
+              <li>6줄 <code>&lt;title&gt;</code>: 브라우저 탭에 뜨는 이름 "Mandy 소개"</li>
+              <li>9줄: 글꼴(Noto Sans KR)을 불러오는 줄</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="map-row css">
+          <div class="lines">10 ~ 244줄<small><span class="tag css">CSS</span></small></div>
+          <div class="desc">
+            <b>디자인</b>: <code>&lt;style&gt;</code>(10줄)부터 <code>&lt;/style&gt;</code>(244줄)까지가 전부 CSS예요. 파일에서 가장 큰 부분이에요.
+            <ul>
+              <li><b>11~36줄</b>: 색깔표. 페이지에 쓰는 색을 한곳에 모아 둔 곳 ⭐ <i>배경색은 여기!</i></li>
+              <li>40~51줄: 페이지 전체(<code>body</code>): 배경, 글꼴, 가운데 정렬</li>
+              <li>58~: 흰 카드, 프로필 동그라미, 이름, 소개 문장 꾸미기</li>
+              <li>122~: 좋아하는 것 하트 3개 꾸미기</li>
+              <li>196~: 날아가는 쿠키, "냠냠!" 글자 꾸미기</li>
+              <li>235~: 폰처럼 좁은 화면일 때 크기 줄이기</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="map-row html">
+          <div class="lines">246 ~ 282줄<small><span class="tag html">HTML</span></small></div>
+          <div class="desc">
+            <b>화면에 보이는 내용</b>: <code>&lt;body&gt;</code> 안쪽이에요. 글자를 바꾸고 싶다면 여기를 보면 돼요.
+            <ul>
+              <li>249줄: 프로필 사진 (커비)</li>
+              <li>250줄: "모두닥 CS/CX팀" 배지</li>
+              <li>251줄: "안녕하세요, Mandy입니다 👋"</li>
+              <li>252~254줄: 하는 일 소개 문장</li>
+              <li>256~278줄: "좋아하는 것"과 하트 3개</li>
+              <li>279줄: "🍪 쿠키 하트를 눌러보세요"</li>
+              <li>281줄: 맨 아래 "© 2026 Mandy"</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="map-row js">
+          <div class="lines">284 ~ 375줄<small><span class="tag js">JavaScript</span></small></div>
+          <div class="desc">
+            <b>움직임</b>: <code>&lt;script&gt;</code>(284줄)부터 <code>&lt;/script&gt;</code>(375줄)까지예요.
+            <ul>
+              <li>쿠키 하트를 누르면 → 쿠키가 커비 입으로 날아가고 → 커비가 꿀꺽 → "냠냠! 🍪"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 화면에서 보기 -->
+    <section>
+      <h2>3. 화면에서 보면 이렇게 나뉘어요</h2>
+      <p class="sub">같은 부분이라도 "내용", "모양", "움직임"을 서로 다른 재료가 맡아요.</p>
+      <div class="mock-area">
+        <div class="mock" aria-hidden="true">
+          <div class="mock-card">
+            <div class="piece"><div class="dot"></div></div>
+            <div class="piece"><div class="pill"></div></div>
+            <div class="piece"><div class="line1"></div></div>
+            <div class="piece"><div class="line2"></div></div>
+            <div class="piece"><div class="line3"></div></div>
+            <div class="hearts"><span>♥</span><span>♥</span><span>♥</span></div>
+          </div>
+        </div>
+        <div class="mock-legend">
+          <div><span class="tag html">HTML</span><span>"사진이 있고, 이름이 있고, 문장이 있고, 하트가 3개 있다"는 <b>내용 자체</b></span></div>
+          <div><span class="tag css">CSS</span><span>회색 배경, 흰 카드, 둥근 사진, 분홍 하트, 글자 크기 같은 <b>보이는 모습 전부</b></span></div>
+          <div><span class="tag js">JavaScript</span><span>점선으로 표시한 <b>첫 번째 하트를 눌렀을 때</b> 일어나는 쿠키 애니메이션</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 배경색 -->
+    <section>
+      <h2>4. 배경색을 바꾸고 싶다면?</h2>
+      <p class="sub">결론부터: <b>12줄</b>과 <b>25줄</b>을 보면 돼요.</p>
+
+      <h3>먼저, "배경"이 두 가지예요</h3>
+      <div class="bg-demo">
+        <div class="bg-box light">
+          <div class="stage"><div class="inner">카드 (흰색)</div></div>
+          <div class="cap"><b>밝은 모드</b> · 노란 테두리 = 페이지 배경</div>
+        </div>
+        <div class="bg-box dark">
+          <div class="stage"><div class="inner">카드 (짙은 남색)</div></div>
+          <div class="cap"><b>다크 모드</b> · 노란 테두리 = 페이지 배경</div>
+        </div>
+      </div>
+      <p style="margin-top:12px">카드 바깥의 넓은 바탕이 <b>페이지 배경</b>, 글자가 올라간 네모가 <b>카드 배경</b>이에요. 그리고 컴퓨터가 <b>다크 모드</b>인지 아닌지에 따라 다른 색이 쓰여요. 그래서 바꿀 줄이 두 개씩 있어요.</p>
+
+      <h3>확인할 줄 (11~36줄, 색깔표)</h3>
+<pre><span class="ln"><span class="n">11</span>    :root {</span><span class="ln"><span class="n">12</span><span class="hl">      --bg: #f6f7fb;</span>          <span class="note">← 페이지 배경 (밝은 모드)</span></span><span class="ln"><span class="n">13</span>      --surface: #ffffff;       <span class="note">← 카드 배경 (밝은 모드)</span></span><span class="ln"><span class="n">14</span>      --text: #1a1d29;</span><span class="ln"><span class="n"> </span>      <span class="note">…</span></span><span class="ln"><span class="n">22</span>    }</span><span class="ln"><span class="n">23</span>    @media (prefers-color-scheme: dark) {   <span class="note">← "다크 모드일 때는" 이라는 뜻</span></span><span class="ln"><span class="n">24</span>      :root {</span><span class="ln"><span class="n">25</span><span class="hl">        --bg: #111318;</span>        <span class="note">← 페이지 배경 (다크 모드)</span></span><span class="ln"><span class="n">26</span>        --surface: #1a1d25;     <span class="note">← 카드 배경 (다크 모드)</span></span><span class="ln"><span class="n"> </span>        <span class="note">…</span></span></pre>
+
+      <table>
+        <thead><tr><th>줄</th><th>무엇의 색?</th><th>지금 색</th></tr></thead>
+        <tbody>
+          <tr><td class="num">12줄</td><td>페이지 배경 · 밝은 모드</td><td><span class="swatch" style="background:#f6f7fb"></span><code>#f6f7fb</code> 아주 연한 회색</td></tr>
+          <tr><td class="num">25줄</td><td>페이지 배경 · 다크 모드</td><td><span class="swatch" style="background:#111318"></span><code>#111318</code> 거의 검정</td></tr>
+          <tr><td class="num">13줄</td><td>카드 배경 · 밝은 모드</td><td><span class="swatch" style="background:#ffffff"></span><code>#ffffff</code> 흰색</td></tr>
+          <tr><td class="num">26줄</td><td>카드 배경 · 다크 모드</td><td><span class="swatch" style="background:#1a1d25"></span><code>#1a1d25</code> 짙은 남색</td></tr>
+        </tbody>
+      </table>
+
+      <h3>바꾸는 방법</h3>
+      <ol class="steps">
+        <li>VS Code에서 <code>index.html</code>을 열고 <b>12줄</b>로 가요. (<code>Ctrl+G</code>를 누르고 12 입력)</li>
+        <li><code>#f6f7fb</code> 부분만 원하는 색 코드로 바꿔요. 예: 연한 분홍 <code>#fff0f5</code>. 앞의 <code>--bg:</code>와 끝의 <code>;</code>는 그대로 둬야 해요.</li>
+        <li>다크 모드에서도 바꾸고 싶다면 <b>25줄</b>도 같은 방법으로 바꿔요. 다크 모드에는 어두운 색이 어울려요. 예: <code>#1e1418</code></li>
+        <li>저장(<code>Cmd+S</code>)하고, 브라우저에서 새로고침(<code>Cmd+R</code>)하면 바로 보여요.</li>
+      </ol>
+
+      <div class="callout">
+        <b>💡 왜 40줄(<code>body</code>)이 아니라 12줄을 바꾸나요?</b><br>
+        42줄에는 <code>background: var(--bg);</code>라고 적혀 있어요. "색깔표의 <code>--bg</code> 칸에 적힌 색을 써라"라는 뜻이에요. 그래서 <b>색깔표(12줄, 25줄)만 바꾸면</b> 42줄은 손대지 않아도 자동으로 따라 바뀌어요. 색을 한곳에 모아 두면, 나중에 색을 바꿀 때 여기저기 찾아다닐 필요가 없어요.
+      </div>
+
+      <div class="callout" style="background: var(--css-soft)">
+        <b>🎨 지금 내 화면은 어떤 모드인가요?</b><br>
+        보내주신 스크린샷은 어두운 화면이었으니 <b>다크 모드</b>예요. 그러면 눈에 보이는 배경은 <b>25줄</b>이에요. 12줄만 바꾸면 내 화면에서는 변화가 안 보일 수 있어요.
+      </div>
+    </section>
+
+    <footer>index.html 377줄 기준 · 코드를 고치면 줄 번호가 조금씩 달라질 수 있어요</footer>
+  </div>
+</body>
+</html>
